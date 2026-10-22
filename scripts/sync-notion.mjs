@@ -4,7 +4,7 @@
 import fs from "node:fs";
 
 const OUT = "public/entries.json";
-const PROP = { url: "noteのリンク", purchase: "購入額", tip: "tip額", review: "感想" };
+const PROP = { url: "noteのリンク", purchase: "購入額", tip: "tips額", tipAlt: "tip額", review: "感想" };
 const token = process.env.NOTION_TOKEN;
 const dbId = process.env.NOTION_DATABASE_ID;
 
@@ -39,7 +39,7 @@ do {
       key: m[2],
       url: `https://note.com/${m[1]}/n/${m[2]}`,
       purchase: props[PROP.purchase]?.number ?? 0,
-      tip: props[PROP.tip]?.number ?? 0,
+      tip: (props[PROP.tip] ?? props[PROP.tipAlt])?.number ?? 0,
       review: text(props[PROP.review]),
     });
   }
