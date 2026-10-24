@@ -1,8 +1,5 @@
 import type { Entry, ReaderPost } from "../data/repository";
 
-const fmt = new Intl.NumberFormat("ja-JP");
-const yen = (n: number) => `¥${fmt.format(n)}`;
-
 export interface CardHandlers {
   onOwnerReview: (entry: Entry) => void;
   onAction: (entry: Entry) => void;
@@ -34,9 +31,6 @@ export function renderEntryCard(e: Entry, readers: ReaderPost[], h: CardHandlers
   li.className = "card";
   li.dataset.id = e.id;
 
-  const sums = document.createElement("p");
-  sums.className = "sums";
-
   const open = document.createElement("a");
   open.className = "btn open";
   open.href = e.url;
@@ -57,20 +51,13 @@ export function renderEntryCard(e: Entry, readers: ReaderPost[], h: CardHandlers
     button("読者のアクション", "action", () => h.onAction(e)),
   );
 
-  li.append(embedFrame(e.key), sums, foot);
-  updateCard(li, e, readers);
+  li.append(embedFrame(e.key), foot);
+  updateCard(li, readers);
   return li;
 }
 
-/** カード下の金額表示と「読者の感想」の人数を更新 */
-export function updateCard(li: HTMLElement, e: Entry, readers: ReaderPost[]): void {
-  const buyers = readers.filter((r) => r.purchase > 0);
-  const tippers = readers.filter((r) => r.tip > 0);
-  const total = (xs: ReaderPost[], f: (r: ReaderPost) => number) => xs.reduce((s, r) => s + f(r), 0);
-  li.querySelector<HTMLElement>(".sums")!.innerHTML =
-    `<dl><dt>サイト主</dt><dd>購入 ${yen(e.purchase)}</dd><dd>tips ${yen(e.tip)}</dd></dl>` +
-    `<dl class="v"><dt>読者</dt><dd>購入 ${yen(total(buyers, (r) => r.purchase))}(${buyers.length}人)</dd>` +
-    `<dd>tips ${yen(total(tippers, (r) => r.tip))}(${tippers.length}人)</dd></dl>`;
+/** 「読者の感想」ボタンの人数を更新(金額はカードには出さず、トップの合計だけに使う) */
+export function updateCard(li: HTMLElement, readers: ReaderPost[]): void {
   const btn = li.querySelector<HTMLButtonElement>(".readers")!;
   btn.textContent = `読者の感想 (${readers.filter((r) => r.review).length})`;
   btn.disabled = readers.every((r) => !r.review);

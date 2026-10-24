@@ -12,24 +12,20 @@
   <body>
     <header class="top">
       <h1>読了の循環</h1>
-      <p class="top-sub">読んだ100円noteを並べて、読了のたびに作品を育てる</p>
+      <p class="top-sub">読んだ100円noteを並べて、感想を書くたびに世界地図を完成させる</p>
     </header>
 
     <main>
-      <section class="summary" aria-label="サマリー">
-        <div><span>読んだnote</span><b id="s-count">0 / 100</b></div>
-        <div><span>サイト主の購入</span><b id="s-owner-purchase">¥0</b></div>
-        <div><span>サイト主のtips</span><b id="s-owner-tip">¥0</b></div>
-        <div class="accent"><span>読者の購入</span><b id="s-reader-purchase">¥0</b></div>
-        <div class="accent"><span>読者のtips</span><b id="s-reader-tip">¥0</b></div>
-        <div class="total"><span>めぐった合計</span><b id="s-total">¥0</b></div>
+      <section class="summary" aria-label="合計金額">
+        <div class="total"><span>めぐった合計金額</span><b id="s-total">¥0</b></div>
       </section>
 
       <section class="block">
-        <h2>作品</h2>
+        <h2>世界地図のジグソーパズル <span id="pz-count" class="count"></span></h2>
         <div class="art-wrap">
-          <canvas id="stage" aria-label="読了の感覚から生まれた作品"></canvas>
+          <canvas id="puzzle" aria-label="世界地図のジグソーパズル(100ピース)"></canvas>
         </div>
+        <p class="note">サイト主や読者が感想を書くたびに、ピースが1つ埋まります。どのピースが埋まるかはランダムで、同じピースが重複することはありません。100ピースがそろうと世界地図の完成です。<br /><strong id="pz-left"></strong></p>
       </section>
 
       <section class="block">

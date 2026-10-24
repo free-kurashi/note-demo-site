@@ -5,7 +5,6 @@
   --muted: #6b7680;
   --line: rgba(0, 0, 0, 0.12);
   --accent: #2fb5a0;
-  --gold: #b98b3a;
 }
 * { box-sizing: border-box; }
 body {
@@ -23,122 +22,53 @@ main, .top, .footer { max-width: 1240px; margin: 0 auto; padding-left: 20px; pad
 .top h1 { font-size: 1.5rem; }
 .top-sub { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
 
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0 8px; }
-.summary div { background: var(--card); border-radius: 12px; padding: 12px 16px; }
-.summary span { display: block; color: var(--muted); font-size: 0.78rem; }
-.summary b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+/* 合計金額 */
+.summary { margin: 20px 0 8px; }
+.summary .total { display: inline-block; min-width: 240px; background: var(--card); border: 1px solid var(--accent); border-radius: 12px; padding: 12px 20px; }
+.summary span { display: block; color: var(--muted); font-size: 0.8rem; }
+.summary b { font-size: 2rem; font-variant-numeric: tabular-nums; }
 
 .block { margin: 40px 0; }
 .block h2 { font-size: 1.15rem; margin-bottom: 14px; }
 .count { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
-.head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 14px; }
-.head-row h2 { margin: 0; }
-.tools { display: flex; gap: 8px; flex-wrap: wrap; }
 
-.row { display: flex; gap: 8px; flex-wrap: wrap; }
-input, select { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-width: 0; }
-.row input { flex: 1 1 280px; }
-input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-input::placeholder { color: var(--muted); }
 button { font: inherit; cursor: pointer; border: none; border-radius: 10px; padding: 10px 20px; background: var(--accent); color: #fff; font-weight: 700; }
-button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 400; }
 button:hover { filter: brightness(1.08); }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.msg { color: var(--muted); font-size: 0.85rem; margin: 10px 0 0; min-height: 1.4em; }
 
-.art-wrap { border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
-#stage { display: block; width: 100%; height: clamp(220px, 34vw, 420px); }
+/* 世界地図パズル */
+.art-wrap { border-radius: 12px; overflow: hidden; }
+#puzzle { display: block; width: 100%; }
+.note { margin: 10px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+.note strong { color: var(--ink); font-weight: 700; }
 
 /* note公式の埋め込みカード */
 .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; align-items: start; }
 .card { position: relative; }
-.card.flash { animation: flash 1.4s ease; }
-@keyframes flash { 0%, 60% { box-shadow: 0 0 0 3px var(--accent); } }
 .note-embed { display: block; width: 100%; border: 0; padding: 0; margin: 0; color-scheme: light; }
-.sums { margin: 0; padding: 8px 12px 0; font-size: 0.8rem; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
-.sums dl { margin: 0; }
-.sums dt { font-weight: 700; color: var(--ink); }
-.sums dd { margin: 0 0 0 1em; }
-.sums .v dt { color: var(--gold); }
 .card-foot { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px 12px; }
 .btn { font: inherit; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; background: #fff; color: var(--ink); font-weight: 400; text-decoration: none; }
 .btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); filter: none; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn.action { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.action:hover { color: #fff; filter: brightness(1.08); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.summary .accent { border: 1px solid rgba(185, 139, 58, 0.5); }
-.summary .accent b { color: var(--gold); }
-.summary .total { background: #fff; border: 1px solid var(--accent); }
+.btn.action, .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.action:hover, .btn.primary:hover { color: #fff; filter: brightness(1.08); }
+.empty-msg { grid-column: 1 / -1; color: var(--muted); }
+
+/* ダイアログ */
 dialog { border: none; border-radius: 16px; padding: 0; width: min(92vw, 440px); color: var(--ink); background: var(--card); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25); }
 dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
 .dlg { padding: 22px; display: flex; flex-direction: column; gap: 12px; margin: 0; }
 .dlg h3 { font-size: 1.1rem; }
 .dlg-head { display: flex; justify-content: space-between; align-items: baseline; }
-.r-name { margin: 0; font-weight: 700; }
-textarea { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; resize: vertical; min-width: 0; }
-textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .dlg label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); }
 .dlg-note { margin: 0; font-size: 0.8rem; color: var(--muted); }
 .dlg-row { display: flex; justify-content: flex-end; gap: 8px; }
+input, textarea { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-width: 0; }
+textarea { resize: vertical; }
+input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+input::placeholder, textarea::placeholder { color: var(--muted); }
+.r-name { margin: 0; font-weight: 700; }
 .review-text { margin: 0; white-space: pre-wrap; line-height: 1.8; max-height: 50vh; overflow: auto; }
-.empty-msg { grid-column: 1 / -1; color: var(--muted); }
-
-.footer { max-width: 1240px; margin: 0 auto; padding-left: 20px; padding-right: 20px; }
-
-.top { padding-top: 32px; padding-bottom: 8px; }
-.top h1 { font-size: 1.5rem; }
-.top-sub { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
-
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0 8px; }
-.summary div { background: var(--card); border-radius: 12px; padding: 12px 16px; }
-.summary span { display: block; color: var(--muted); font-size: 0.78rem; }
-.summary b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
-
-.block { margin: 40px 0; }
-.block h2 { font-size: 1.15rem; margin-bottom: 14px; }
-.count { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
-.head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 14px; }
-.head-row h2 { margin: 0; }
-.tools { display: flex; gap: 8px; flex-wrap: wrap; }
-
-.row { display: flex; gap: 8px; flex-wrap: wrap; }
-input, select { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-width: 0; }
-.row input { flex: 1 1 280px; }
-input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-input::placeholder { color: var(--muted); }
-button { font: inherit; cursor: pointer; border: none; border-radius: 10px; padding: 10px 20px; background: var(--accent); color: #fff; font-weight: 700; }
-button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 400; }
-button:hover { filter: brightness(1.08); }
-button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.msg { color: var(--muted); font-size: 0.85rem; margin: 10px 0 0; min-height: 1.4em; }
-
-.art-wrap { border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
-#stage { display: block; width: 100%; height: clamp(220px, 34vw, 420px); }
-
-/* note風カード */
-.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-.card { border-radius: 16px; padding: 14px 14px 10px; transition: background 0.2s; }
-.card:hover { background: var(--card); }
-.card.flash { animation: flash 1.4s ease; }
-@keyframes flash { 0%, 60% { background: rgba(65, 201, 180, 0.25); } }
-.thumb { position: relative; aspect-ratio: 1.91 / 1; border-radius: 12px; overflow: hidden; background: #fff; }
-.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.thumb-fallback { position: absolute; inset: 0; z-index: -1; background: linear-gradient(135deg, #2c343c, #384350); }
-.thumb:has(img) .thumb-fallback { display: none; }
-.title { margin-top: 12px; font-size: 1.05rem; line-height: 1.5; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.meta { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 0.85rem; min-width: 0; }
-.avatar { flex: none; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: #384350; }
-.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.author { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.author:hover { color: var(--ink); }
-.time { flex: none; }
-.bonus { flex: none; margin-left: auto; color: var(--gold); font-size: 0.78rem; border: 1px solid rgba(185, 139, 58, 0.5); border-radius: 999px; padding: 0 8px; }
-.actions { display: flex; align-items: center; gap: 18px; margin-top: 10px; color: var(--muted); }
-.like { display: inline-flex; align-items: center; gap: 6px; }
-.like b { font-weight: 400; font-size: 1rem; font-variant-numeric: tabular-nums; }
-.price { margin-left: auto; font-size: 0.8rem; border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; }
-.empty-msg { grid-column: 1 / -1; color: var(--muted); }
 
 .footer { padding-top: 24px; padding-bottom: 56px; color: var(--muted); font-size: 0.78rem; border-top: 1px solid var(--line); margin-top: 48px; }
 .footer p { margin: 0; }
