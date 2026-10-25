@@ -15,7 +15,10 @@
   <body>
     <header class="hero">
       <div class="hero-inner">
-        <h1>読了の循環 <span class="demo-badge">デモ画面</span></h1>
+        <div class="title-row">
+          <h1>読了の循環 <span class="demo-badge">デモ画面</span></h1>
+          <button type="button" id="help-btn" class="help-btn" aria-haspopup="dialog"><span aria-hidden="true">?</span> 使い方を見る</button>
+        </div>
         <p class="hero-sub">読んだ100円noteを並べて、感想を書くたびに、世界地図を完成させる。</p>
       </div>
     </header>
@@ -48,6 +51,50 @@
       <p class="demo-notice"><strong>これはデモ画面です。</strong>表示されている感想・金額・パズルの進み具合は、動作を見せるためのサンプルであり、実際のコメントや実際の購入・チップとは無関係です。</p>
       <p>記事カードは note 公式の埋め込みで、記事自体は実在します。一方、サイト主の感想・購入額・tips額・読者の感想と金額はすべてデモ用のサンプルです(本番では、サイト主が Notion に入力した内容と、読者が実際に入力した内容を表示する予定です)。読者のアクションとして入力した内容は、この端末のブラウザにだけ保存され、他の人には表示されません。</p>
     </footer>
+
+    <dialog id="help-dialog">
+      <div class="dlg help">
+        <h3>このサイトの使い方</h3>
+
+        <section>
+          <h4>どんなサイト?</h4>
+          <p>読んだ note と、そこで感じたことを集めるサイトです。感想が1つ書かれるたびに、世界地図のジグソーパズル(全100ピース)が1ピースずつ埋まり、<strong>みんなの感想が集まるほど地図が完成</strong>に近づきます。画面の上には、note に使われたお金の合計も表示されます。</p>
+        </section>
+
+        <section>
+          <h4>想定している使い方</h4>
+          <ul>
+            <li><strong>サイト主</strong>: 読んだ note を登録して、感想と、購入した金額・チップの金額を残します。</li>
+            <li><strong>読者(ここを見に来た人)</strong>: 気になった note を読んで、感想や、購入した金額・チップの金額を残せます。</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>はじめての方へ: 3ステップ</h4>
+          <ol class="howto">
+            <li><b>note を読む</b><span>下の「読んだnote」に並んでいるカードの「noteで開く ↗」を押すと、本物の記事が開きます。</span></li>
+            <li><b>「読者のアクション」を押す</b><span>カードの緑のボタンです。お名前(空欄でもOK)、購入した金額、チップの金額、感想を入れて「記録する」を押します。</span></li>
+            <li><b>パズルを見る</b><span><strong>感想を書くと、パズルのピースが1つ埋まります。</strong>どこが埋まるかはランダムです。あわせて、上の金額にも加算されます。</span></li>
+          </ol>
+          <p class="hint">※金額だけを入れて感想を空にすると、金額は加算されますが、ピースは埋まりません。</p>
+        </section>
+
+        <section>
+          <h4>ほかのボタン</h4>
+          <ul>
+            <li><b>サイト主の感想</b>: サイト主が書いた感想を読めます。</li>
+            <li><b>読者の感想</b>: 読者の感想を、1人ずつ「前の人 / 次の人」で読めます。</li>
+          </ul>
+        </section>
+
+        <p class="demo-warn"><strong>これはデモ画面です。</strong>表示されている感想や金額はサンプルで、実際のものではありません。あなたが入力した内容は、このパソコン(ブラウザ)の中にだけ保存され、他の人には表示されません。気軽に試してください。</p>
+
+        <div class="dlg-row">
+          <button type="button" id="help-close" class="btn">閉じる</button>
+          <button type="button" id="help-try" class="btn primary">読者のアクションを試してみる</button>
+        </div>
+      </div>
+    </dialog>
 
     <dialog id="review-dialog">
       <div class="dlg">

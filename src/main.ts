@@ -44,7 +44,7 @@ async function main() {
   };
 
   /* ダイアログ共通: 外側クリックで閉じる */
-  const dialogs = ["#review-dialog", "#readers-dialog", "#action-dialog"].map((s) => $<HTMLDialogElement>(s));
+  const dialogs = ["#review-dialog", "#readers-dialog", "#action-dialog", "#help-dialog"].map((s) => $<HTMLDialogElement>(s));
   for (const d of dialogs) d.addEventListener("click", (ev) => ev.target === d && d.close());
 
   /* サイト主の感想 */
@@ -112,6 +112,20 @@ async function main() {
       renderEntryCard(e, readersOf(e.id), { onOwnerReview: openOwnerReview, onAction: openAction, onReaders: openReaders }),
     ),
   );
+  /* 使い方(チュートリアル) */
+  const helpDlg = $<HTMLDialogElement>("#help-dialog");
+  $("#help-btn").addEventListener("click", () => helpDlg.showModal());
+  $("#help-close").addEventListener("click", () => helpDlg.close());
+  $("#help-try").addEventListener("click", () => {
+    helpDlg.close();
+    const first = entries[0];
+    if (!first) return;
+    const li = $("#cards").querySelector<HTMLElement>(`[data-id="${first.id}"]`);
+    li?.scrollIntoView({ behavior: "smooth", block: "center" });
+    li?.classList.add("flash");
+    window.setTimeout(() => openAction(first), 700);
+  });
+
   renderSummary();
   puzzle.setFilled(reviewCount());
   renderPuzzleNote();
