@@ -1,13 +1,13 @@
 # 読了の循環(デモ)
 
-読んだ100円noteを note 公式の埋め込みカードで並べ、サイト主や読者が感想を書くたびに、北海道・美瑛「四季彩の丘」の風景のジグソーパズル(100ピース)が埋まっていくサイト。
+読んだ100円noteを note 公式の埋め込みカードで並べ、サイト主や読者が感想を書くたびに、世界地図のジグソーパズル(100ピース)が埋まっていくサイト。
 公開先: https://free-kurashi.github.io/note-demo-site/ (GitHub Pages)。最終的には Cloudflare で公開する予定(後述)。
 
 ## いまできること(デモ版)
 
 - note の記事を、note 公式の埋め込み(`https://note.com/embed/notes/<記事ID>` + 公式 `embed.js`)でカード表示
 - **ページ上部に金額を表示**: 今ある合計金額 / サイト主の購入額 / サイト主のtip額 / 読者の皆さんの購入額 / 読者の皆さんのtip額(カードごとの金額表示はしない)
-- **四季彩の丘のジグソーパズル(100ピース)**: サイト主や読者が感想を書くたびにピースが1つ埋まる。どのピースが埋まるかはランダムで、重複しない(固定シードの並び順)。感想なしの金額だけの入力では埋まらない。100ピースそろうと風景の完成
+- **世界地図のジグソーパズル(100ピース)**: サイト主や読者が感想を書くたびにピースが1つ埋まる。どのピースが埋まるかはランダムで、重複しない(固定シードの並び順)。感想なしの金額だけの入力では埋まらない。100ピースそろうと世界地図の完成
 - カードのボタン
   - **noteで開く**: 記事を新しいタブで開く
   - **サイト主の感想**: サイト主の感想を表示
@@ -52,8 +52,7 @@ src/main.ts              画面の組み立て・ボタン処理・金額集計
 src/ui/cards.ts          カード(埋め込み iframe + ボタン)
 src/data/repository.ts   データ取得・保存(Entry / ReaderPost の型もここ)
 src/data/demo.ts         デモ用の読者の感想
-src/art/puzzle.ts        写真のジグソーパズル(100ピースに分割、感想の数だけランダムに埋める)
-public/images/           ヘッダー写真・パズル写真(Wikimedia Commons、CC BY。下記の写真クレジット参照)
+src/art/puzzle.ts        世界地図のジグソーパズル(d3-geo + world-atlas で地図を描き、100ピースに分割。感想の数だけランダムに埋める)
 src/art/rng.ts           シード付き乱数
 scripts/sync-notion.mjs  Notion → public/entries.json
 public/entries.json      登録データ(Notion 未接続時の初期データ)
@@ -62,13 +61,6 @@ vite.config.ts           base を /note-demo-site/ に設定(Cloudflare では B
 ```
 
 データの出し入れは `src/data/repository.ts` に集約してあり、サーバー側に移すときはここを差し替える。
-
-## 写真クレジット(CC BY)
-
-写真は Wikimedia Commons の CC BY ライセンスのものを使用している(他サイトの写真は使っていない)。再利用の際は表示を維持すること。
-
-- パズル: Party Lin「Hokkaido - Biei, Shikisai no Oka, august 2010」([CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)) — ピースへの分割・縮小・暗色の重ね表示を加えている
-- ヘッダー: 663highland「Shikisai-no-oka Biei Hokkaido Japan01n」([CC BY 2.5](https://creativecommons.org/licenses/by/2.5/)) — 縮小と暗色グラデーションの重ね表示を加えている
 
 ## 開発
 

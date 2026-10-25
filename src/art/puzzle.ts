@@ -1,14 +1,18 @@
+import { geoGraticule10, geoNaturalEarth1, geoPath } from "d3-geo";
+import { feature } from "topojson-client";
+import world from "world-atlas/countries-110m.json";
 import { hash, mulberry32 } from "./rng";
 
 export const COLS = 10;
 export const ROWS = 10;
 export const TOTAL = COLS * ROWS; // 100ピース
-const ASPECT = 1.5; // 横 / 縦(写真と同じ 3:2)
-const PHOTO = `${import.meta.env.BASE_URL}images/puzzle.jpg`;
+const ASPECT = 1.5; // 横 / 縦
+
+const LAND = ["#e8c27a", "#8fd3c7", "#e58fb0", "#9bb7ef", "#b6d98a", "#f0a77a", "#c4a3e8", "#7fcfe0"];
 
 /** ピースが埋まる順番。固定シードのシャッフルなので、毎回同じ順で重複しない。 */
 export function pieceOrder(): number[] {
-  const rnd = mulberry32(hash("shikisai-puzzle"));
+  const rnd = mulberry32(hash("world-puzzle"));
   const order = Array.from({ length: TOTAL }, (_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rnd() * (i + 1));
@@ -35,12 +39,12 @@ function edge(ctx: CanvasRenderingContext2D, ax: number, ay: number, bx: number,
   ctx.lineTo(bx, by);
 }
 
-/** 北海道・美瑛の四季彩の丘の写真を使った100ピース・ジグソーパズル。 */
-export class PhotoPuzzle {
+/** 世界地図の100ピース・ジグソーパズル。 */
+export class WorldPuzzle {
   private ctx: CanvasRenderingContext2D;
   private w = 0;
   private h = 0;
-  private photo: HTMLImageElement | null = null;
+  private map: HTMLCanvasElement | null = null;
   private filled = 0;
   private order = pieceOrder();
   private rank = new Map<number, number>(); // ピース番号 → 埋まる順位
@@ -58,12 +62,6 @@ export class PhotoPuzzle {
     this.tabsV = Array.from({ length: ROWS }, () => Array.from({ length: COLS + 1 }, (_, c) => (c === 0 || c === COLS ? 0 : sign())));
     new ResizeObserver(() => this.resize()).observe(canvas);
     this.resize();
-    const img = new Image();
-    img.onload = () => {
-      this.photo = img;
-      this.draw(0);
-    };
-    img.src = PHOTO;
   }
 
   get count(): number {
@@ -92,6 +90,7 @@ export class PhotoPuzzle {
     this.canvas.width = Math.round(this.w * dpr);
     this.canvas.height = Math.round(this.h * dpr);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.map = this.buildMap(dpr);
     this.draw(0);
   }
 
@@ -101,6 +100,49 @@ export class PhotoPuzzle {
     this.draw(t);
     if (t < 1) requestAnimationFrame((n) => this.tick(n));
     else this.reveal = null;
+  }
+
+  /** 世界地図をオフスクリーンに描く(陸地は国ごとに色分け) */
+  private buildMap(dpr: number): HTMLCanvasElement {
+    const c = document.createElement("canvas");
+    c.width = Math.round(this.w * dpr);
+    c.height = Math.round(this.h * dpr);
+    const ctx = c.getContext("2d")!;
+    ctx.scale(dpr, dpr);
+    const sea = ctx.createLinearGradient(0, 0, 0, this.h);
+    sea.addColorStop(0, "#12365a");
+    sea.addColorStop(1, "#0b2440");
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, 0, this.w, this.h);
+
+    const countries = feature(world as never, (world as never as { objects: { countries: never } }).objects.countries) as unknown as {
+      features: { id?: string }[];
+    };
+    const land = { type: "FeatureCollection" as const, features: countries.features.filter((f) => f.id !== "010") }; // 南極は除く
+    const pad = Math.min(this.w, this.h) * 0.03;
+    const projection = geoNaturalEarth1().fitExtent(
+      [
+        [pad, pad],
+        [this.w - pad, this.h - pad],
+      ],
+      land as never,
+    );
+    const path = geoPath(projection, ctx);
+    ctx.beginPath();
+    path(geoGraticule10());
+    ctx.strokeStyle = "rgba(255,255,255,0.07)";
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+    land.features.forEach((f, i) => {
+      ctx.beginPath();
+      path(f as never);
+      ctx.fillStyle = LAND[(i * 7 + hash(String(f.id ?? i))) % LAND.length];
+      ctx.fill();
+      ctx.strokeStyle = "rgba(10,25,40,0.55)";
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    });
+    return c;
   }
 
   private piecePath(piece: number): void {
@@ -125,41 +167,30 @@ export class PhotoPuzzle {
   /** reveal: 0..1(新しく埋まったピースの出現アニメーション)。0 のときは通常描画。 */
   private draw(reveal: number): void {
     const { ctx, w, h } = this;
-    ctx.fillStyle = "#121712";
+    ctx.fillStyle = "#12171c";
     ctx.fillRect(0, 0, w, h);
     const animating = this.reveal?.piece;
     for (let piece = 0; piece < TOTAL; piece++) {
       const filled = (this.rank.get(piece) ?? TOTAL) < this.filled;
       this.piecePath(piece);
-      if (filled && piece !== animating && this.photo) {
+      if (filled && piece !== animating && this.map) {
         ctx.save();
         ctx.clip();
-        ctx.drawImage(this.photo, 0, 0, w, h);
+        ctx.drawImage(this.map, 0, 0, w, h);
         ctx.restore();
         this.piecePath(piece);
         ctx.strokeStyle = "rgba(8,16,24,0.55)";
         ctx.lineWidth = 1;
         ctx.stroke();
       } else if (piece !== animating) {
-        // 未完成のピースは、写真をうっすら暗くかぶせて表示する(完成後の姿のヒント)
-        if (this.photo) {
-          ctx.save();
-          ctx.clip();
-          ctx.drawImage(this.photo, 0, 0, w, h);
-          ctx.fillStyle = "rgba(16,22,18,0.9)";
-          ctx.fillRect(0, 0, w, h);
-          ctx.restore();
-          this.piecePath(piece);
-        } else {
-          ctx.fillStyle = "#1d252c";
-          ctx.fill();
-        }
-        ctx.strokeStyle = "rgba(255,255,255,0.1)";
+        ctx.fillStyle = "#1d252c";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.08)";
         ctx.lineWidth = 1;
         ctx.stroke();
       }
     }
-    if (animating !== undefined && this.photo) {
+    if (animating !== undefined && this.map) {
       const a = reveal;
       this.piecePath(animating);
       ctx.fillStyle = "#1d252c";
@@ -168,7 +199,7 @@ export class PhotoPuzzle {
       this.piecePath(animating);
       ctx.clip();
       ctx.globalAlpha = a;
-      ctx.drawImage(this.photo, 0, 0, w, h);
+      ctx.drawImage(this.map, 0, 0, w, h);
       ctx.restore();
       this.piecePath(animating);
       ctx.shadowColor = `rgba(255,236,180,${1 - a})`;

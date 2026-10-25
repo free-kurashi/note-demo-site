@@ -1,5 +1,5 @@
 import "./style.css";
-import { TOTAL, PhotoPuzzle } from "./art/puzzle";
+import { TOTAL, WorldPuzzle } from "./art/puzzle";
 import { demoReaders } from "./data/demo";
 import { loadEntries, loadReaders, saveReaders } from "./data/repository";
 import type { Entry, ReaderPost } from "./data/repository";
@@ -15,14 +15,14 @@ async function main() {
   const demo = new Map(entries.map((e) => [e.id, demoReaders(e.id)]));
   const readersOf = (id: string): ReaderPost[] => [...(demo.get(id) ?? []), ...(local[id] ?? [])];
 
-  /* 四季彩の丘パズル: サイト主・読者が感想を書くたびにピースが1つ埋まる(感想なしの金額だけの入力では埋まらない) */
-  const puzzle = new PhotoPuzzle($<HTMLCanvasElement>("#puzzle"));
+  /* 世界地図パズル: サイト主・読者が感想を書くたびにピースが1つ埋まる(感想なしの金額だけの入力では埋まらない) */
+  const puzzle = new WorldPuzzle($<HTMLCanvasElement>("#puzzle"));
   const reviewCount = () =>
     entries.reduce((s, e) => s + (e.review ? 1 : 0) + readersOf(e.id).filter((r) => r.review).length, 0);
   const renderPuzzleNote = () => {
     const n = puzzle.count;
     $("#pz-count").textContent = `${n} / ${TOTAL} ピース`;
-    $("#pz-left").textContent = n >= TOTAL ? "四季彩の丘の風景が完成しました!" : `完成まで あと ${TOTAL - n} ピース`;
+    $("#pz-left").textContent = n >= TOTAL ? "世界地図が完成しました!" : `完成まで あと ${TOTAL - n} ピース`;
   };
 
   const renderSummary = () => {
