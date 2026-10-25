@@ -1,5 +1,5 @@
 import "./style.css";
-import { TOTAL, WorldPuzzle } from "./art/puzzle";
+import { TOTAL, PhotoPuzzle } from "./art/puzzle";
 import { demoReaders } from "./data/demo";
 import { loadEntries, loadReaders, saveReaders } from "./data/repository";
 import type { Entry, ReaderPost } from "./data/repository";
@@ -15,21 +15,27 @@ async function main() {
   const demo = new Map(entries.map((e) => [e.id, demoReaders(e.id)]));
   const readersOf = (id: string): ReaderPost[] => [...(demo.get(id) ?? []), ...(local[id] ?? [])];
 
-  /* 世界地図パズル: サイト主・読者が感想を書くたびにピースが1つ埋まる(感想なしの金額だけの入力では埋まらない) */
-  const puzzle = new WorldPuzzle($<HTMLCanvasElement>("#puzzle"));
+  /* 四季彩の丘パズル: サイト主・読者が感想を書くたびにピースが1つ埋まる(感想なしの金額だけの入力では埋まらない) */
+  const puzzle = new PhotoPuzzle($<HTMLCanvasElement>("#puzzle"));
   const reviewCount = () =>
     entries.reduce((s, e) => s + (e.review ? 1 : 0) + readersOf(e.id).filter((r) => r.review).length, 0);
   const renderPuzzleNote = () => {
     const n = puzzle.count;
     $("#pz-count").textContent = `${n} / ${TOTAL} ピース`;
-    $("#pz-left").textContent = n >= TOTAL ? "世界地図が完成しました!" : `完成まで あと ${TOTAL - n} ピース`;
+    $("#pz-left").textContent = n >= TOTAL ? "四季彩の丘の風景が完成しました!" : `完成まで あと ${TOTAL - n} ピース`;
   };
 
-  // 金額(サイト主・読者の購入額とtips額)は内部で保持し、画面には合計だけを出す
   const renderSummary = () => {
-    const owner = entries.reduce((s, e) => s + e.purchase + e.tip, 0);
-    const readers = entries.flatMap((e) => readersOf(e.id)).reduce((s, r) => s + r.purchase + r.tip, 0);
-    $("#s-total").textContent = yen(owner + readers);
+    const all = entries.flatMap((e) => readersOf(e.id));
+    const op = entries.reduce((s, e) => s + e.purchase, 0);
+    const ot = entries.reduce((s, e) => s + e.tip, 0);
+    const rp = all.reduce((s, r) => s + r.purchase, 0);
+    const rt = all.reduce((s, r) => s + r.tip, 0);
+    $("#s-total").textContent = yen(op + ot + rp + rt);
+    $("#s-owner-purchase").textContent = yen(op);
+    $("#s-owner-tip").textContent = yen(ot);
+    $("#s-reader-purchase").textContent = yen(rp);
+    $("#s-reader-tip").textContent = yen(rt);
     $("#list-count").textContent = `${entries.length}件`;
   };
   const refreshCard = (e: Entry) => {
