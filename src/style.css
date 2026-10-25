@@ -25,6 +25,7 @@ h1, h2, h3 { margin: 0; font-family: var(--serif); }
 .hero { color: var(--ink); }
 .hero-inner { max-width: 1180px; margin: 0 auto; padding: clamp(40px, 7vw, 72px) 24px 28px; }
 .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 700; letter-spacing: 0.12em; line-height: 1.2; }
+.demo-badge { display: inline-block; vertical-align: middle; margin-left: 10px; padding: 3px 12px; border-radius: 999px; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; color: #fff; background: #d9382b; }
 .hero-sub { margin: 10px 0 0; font-size: clamp(0.9rem, 2vw, 1.05rem); color: var(--muted); }
 
 main { max-width: 1180px; margin: 0 auto; padding: 0 20px; position: relative; }
@@ -90,6 +91,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .footer { margin-top: 56px; padding: 40px 24px 56px; background: var(--deep); color: rgba(255, 255, 255, 0.78); font-size: 0.78rem; }
 .footer > * { max-width: 1180px; margin-left: auto; margin-right: auto; }
 .footer p { margin-top: 0; margin-bottom: 8px; }
+.demo-notice { padding: 12px 16px; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 12px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 0.9rem; line-height: 1.8; }
 .footer-title { font-family: var(--serif); font-size: 1.1rem; letter-spacing: 0.16em; color: #fff; margin-bottom: 12px !important; }
 
 @media (max-width: 560px) {

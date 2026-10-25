@@ -10,12 +10,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
-    <title>読了の循環</title>
+    <title>読了の循環(デモ画面)</title>
   </head>
   <body>
     <header class="hero">
       <div class="hero-inner">
-        <h1>読了の循環</h1>
+        <h1>読了の循環 <span class="demo-badge">デモ画面</span></h1>
         <p class="hero-sub">読んだ100円noteを並べて、感想を書くたびに、世界地図を完成させる。</p>
       </div>
     </header>
@@ -44,13 +44,15 @@
     </main>
 
     <footer class="footer">
-      <p class="footer-title">読了の循環</p>
-      <p>デモ版。記事カードは note 公式の埋め込みです。記事の登録・購入額・tips額・サイト主の感想は、サイト主が Notion のデータベースに入力したものです。読者の感想と金額は一部がデモ用のサンプルで、読者のアクションの入力はこの端末のブラウザにだけ保存されます(他の人には合算されません)。</p>
+      <p class="footer-title">読了の循環(デモ画面)</p>
+      <p class="demo-notice"><strong>これはデモ画面です。</strong>表示されている感想・金額・パズルの進み具合は、動作を見せるためのサンプルであり、実際のコメントや実際の購入・チップとは無関係です。</p>
+      <p>記事カードは note 公式の埋め込みで、記事自体は実在します。一方、サイト主の感想・購入額・tips額・読者の感想と金額はすべてデモ用のサンプルです(本番では、サイト主が Notion に入力した内容と、読者が実際に入力した内容を表示する予定です)。読者のアクションとして入力した内容は、この端末のブラウザにだけ保存され、他の人には表示されません。</p>
     </footer>
 
     <dialog id="review-dialog">
       <div class="dlg">
         <h3>サイト主の感想</h3>
+        <p class="dlg-note">※デモ用のサンプルです。実際の感想ではありません。</p>
         <p id="review-text" class="review-text"></p>
         <form method="dialog"><button class="btn">閉じる</button></form>
       </div>
